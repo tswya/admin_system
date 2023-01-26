@@ -1,7 +1,6 @@
 .DS_Store
 node_modules
 /dist
-vue_api_server
 
 
 # local env files
