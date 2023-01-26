@@ -74,6 +74,7 @@
       title="添加分类"
       :visible.sync="addCateDialogVisible"
       width="50%"
+      @close="addCateDialogClosed"
     >
       <el-form
         :model="addCateForm"
@@ -86,20 +87,20 @@
         </el-form-item>
         <el-form-item label="父级分类">
           <el-cascader
+            expand-trigger="hover"
             v-model="selectedKeys"
-            :options="parentCateList"
-            :expandTrigger="hover"
             :props="cascaderProps"
+            :options="parentCateList"
             @change="parentCateChange"
             clearable
+            :collapse-tags="true"
+            change-on-select
           ></el-cascader>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="addCateDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="addCateDialogVisible = false"
-          >确 定</el-button
-        >
+        <el-button type="primary" @click="addCate">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -177,7 +178,40 @@ export default {
         return this.$message.error('获取父级分类数据失败！')
       this.parentCateList = res.data
     },
-    parentCateChange() {}
+    parentCateChange() {
+      console.log(this.selectedKeys)
+      if (this.selectedKeys.length > 0) {
+        this.addCateForm.cat_pid =
+          this.selectedKeys[this.selectedKeys.length - 1]
+        this.addCateForm.cat_level = this.selectedKeys.length
+        return
+      } else {
+        this.addCateForm.cat_pid = 0
+        this.addCateForm.cat_level = 0
+      }
+    },
+    addCate() {
+      // console.log(this.addCateForm)
+      this.$refs.addCateFormRef.validate(async (valid) => {
+        if (!valid) return
+        const { data: res } = await this.$http.post(
+          'categories',
+          this.addCateForm
+        )
+        console.log(res.meta)
+        if (res.meta.status !== 201)
+          return this.$message.error('添加分类失败！')
+        this.$message.success('添加分类成功！')
+        this.getCateList()
+        this.addCateDialogVisible = false
+      })
+    },
+    addCateDialogClosed() {
+      this.$refs.addCateFormRef.resetFields()
+      this.selectedKeys = []
+      this.addCateForm.cat_level = 0
+      this.addCateForm.cat_pid = 0
+    }
   }
 }
 </script>

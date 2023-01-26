@@ -19,3 +19,23 @@ html, body, #app {
 .el-pagination {
   margin-top: 15px;
 }
+.el-scrollbar__wrap {
+  height: 200px;
+  
+}
+.el-cascader-node {
+  max-width: 250px;
+}
+.el-steps {
+  margin: 15px 0;
+}
+.el-step__title { 
+  font-size: 13px;
+}
+.el-editor {
+  min-height: 300px;
+}
+.el-tag,
+.el-input {
+  margin-left: 10px;
+}
