@@ -15,7 +15,7 @@
           <el-button type="primary">添加角色</el-button>
         </el-col>
       </el-row>
-      <el-table :data="roleList" border stripe="">
+      <el-table :data="roleList" border stripe row-key="id">
         <!-- 展开列 -->
         <el-table-column type="expand">
           <template slot-scope="scope">
